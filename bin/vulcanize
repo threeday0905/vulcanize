@@ -29,6 +29,7 @@ var help = [
   '  --config: Read the given config file',
   '  --strip, -s: Remove comments and empty text nodes',
   '  --abspath, -p: Specify site root. Resolve paths to absolute paths based on site root',
+  '  --bundle, -b: Make a "bundle" output file. See BUNDLES in README',
   '  --csp: Extract inline scripts to a separate file (uses <output file name>.js)',
   '  --inline: The opposite of CSP mode, inline all assets (script and css) into the document',
   '  --csp --inline: Bundle all javascript (inline and external) into <output file name>.js',
@@ -55,6 +56,7 @@ function printHelp() {
 
 var options = nopt(
   {
+    'bundle': Boolean,
     'config': path,
     'csp': Boolean,
     'help': Boolean,
@@ -67,6 +69,7 @@ var options = nopt(
   },
   {
     '?': ['--help'],
+    'b': ['--bundle'],
     'h': ['--help'],
     'o': ['--output'],
     'p': ['--abspath'],
