@@ -88,6 +88,23 @@ loader.request(target).then(function(content) {
   return hyd.hydrolyze(content, true, target, loader);
 }).then(function(tree) {
   var flatDoc = flatten(tree);
+  // polymer 0.8 ideal build
+  var head = dom5.query(flatDoc, matchers.head);
+  var body = dom5.query(flatDoc, matchers.body);
+  remove(head);
+  remove(body);
+  head.childNodes.forEach(reparent(flatDoc));
+  body.childNodes.forEach(reparent(flatDoc));
+  flatDoc.childNodes = head.childNodes.concat(body.childNodes);
+  var scriptNodes = dom5.queryAll(flatDoc, matchers.JS);
+  var fullText = scriptNodes.reduce(function(a, b) {
+    return a + b.childNodes[0].value;
+  }, '');
+  scriptNodes.forEach(remove);
+  var s = scriptNodes[0];
+  s.childNodes[0].value = fullText;
+  flatDoc.childNodes.push(s);
+  // end
   var serializer = new (require('parse5').Serializer)();
   console.log(serializer.serialize(flatDoc));
 }).catch(function(err) {
